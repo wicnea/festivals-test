@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's On in Seoul: Festivals & Events | Seoul Genius</title>
+<meta name="description" content="Festivals, palace night openings and cultural events in Seoul for the next six weeks, checked against official sources. Updated every two days by Seoul Genius.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EEF2EC;      /* pale celadon */
+    --paper-2: #E3EAE3;
+    --ink: #1B2B26;
+    --ink-soft: #4A5C55;
+    --pine: #2F5D50;
+    --pine-light: #7FA394;
+    --red: #A8352C;        /* dancheong red */
+    --ochre: #B5832A;
+    --line: #C6D2C9;
+    --serif: "Young Serif", Georgia, "Times New Roman", serif;
+    --sans: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #16211D; --paper-2: #1D2A25; --ink: #E4ECE6; --ink-soft: #A7B8B0;
+      --pine: #8CC0AE; --pine-light: #4F7C6D; --red: #E0766B; --ochre: #D9A955; --line: #33443D;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 400 1rem/1.6 var(--sans);
+  }
+  a { color: var(--pine); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--ochre); outline-offset: 2px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header */
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .brand { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); text-decoration: none; }
+  .top a.tours { font-weight: 600; font-size: .95rem; }
+
+  /* Hero */
+  .hero { padding: 48px 0 20px; }
+  .hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 7vw, 4.6rem); line-height: 1.02; margin: 0 0 16px; letter-spacing: -0.01em; max-width: 14ch; }
+  .hero p { margin: 0; color: var(--ink-soft); max-width: 58ch; font-size: 1.08rem; }
+  .updated { margin-top: 10px !important; font-size: .9rem !important; }
+
+  /* Timeline ribbon: the page's one bold element */
+  .ribbon { margin: 32px 0 8px; }
+  .ribbon h2 { font-family: var(--serif); font-weight: 400; font-size: 1.35rem; margin: 0 0 12px; }
+  .ribbon-scroll { overflow-x: auto; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--line); }
+  .ribbon-inner { min-width: 720px; position: relative; }
+  .ticks { display: grid; grid-template-columns: 190px 1fr; border-bottom: 1px solid var(--line); }
+  .ticks-track { position: relative; height: 30px; }
+  .tick { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line); font-size: .74rem; color: var(--ink-soft); padding: 6px 0 0 4px; white-space: nowrap; }
+  .tick.month { border-left-color: var(--ink); color: var(--ink); font-weight: 600; }
+  .row { display: grid; grid-template-columns: 190px 1fr; align-items: center; text-decoration: none; color: inherit; border-bottom: 1px solid var(--paper-2); }
+  .row:hover .row-name, .row:focus-visible .row-name { text-decoration: underline; }
+  .row-name { font-size: .86rem; font-weight: 500; padding: 7px 12px 7px 0; line-height: 1.25; }
+  .row-track { position: relative; height: 34px; }
+  .bar { position: absolute; top: 9px; height: 16px; border-radius: 2px; background: var(--pine-light); }
+  .bar.palace { background: var(--red); }
+  .bar.daytrip { background: var(--ochre); }
+  .bar.open-left { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+  .bar.open-right { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+  .today-line { position: absolute; top: 0; bottom: 0; left: 190px; width: 2px; background: var(--ink); pointer-events: none; }
+  .legend { display: flex; flex-wrap: wrap; gap: 18px; font-size: .85rem; color: var(--ink-soft); margin-top: 10px; }
+  .legend span::before { content: ""; display: inline-block; width: 18px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; background: var(--pine-light); }
+  .legend .lg-palace::before { background: var(--red); }
+  .legend .lg-daytrip::before { background: var(--ochre); }
+
+  /* Filters */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 36px 0 8px; }
+  .filters button {
+    font: 500 .92rem var(--sans); color: var(--ink); background: transparent;
+    border: 1px solid var(--ink-soft); border-radius: 999px; padding: 7px 16px; cursor: pointer;
+  }
+  .filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* Event lists */
+  section.group { margin-top: 36px; }
+  section.group > h2 { font-family: var(--serif); font-weight: 400; font-size: 1.9rem; margin: 0; padding-bottom: 8px; border-bottom: 2px solid var(--ink); }
+  .event { display: grid; grid-template-columns: 170px 1fr 280px; grid-template-areas: "date body photo"; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+  .event > .date-col { grid-area: date; }
+  .event > .body { grid-area: body; min-width: 0; }
+  .event > .photo { grid-area: photo; }
+
+  /* Photos: licensed images only (own photos, KOGL Type 1, or organizer permission) */
+  .photo { margin: 0; }
+  .photo-frame { aspect-ratio: 3 / 4; border-radius: 3px; overflow: hidden; background: var(--paper-2); }
+  /* contain, never crop: KOGL Type 3 images (most festival posters) may not be altered */
+  .photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .photo figcaption { font-size: .78rem; color: var(--ink-soft); margin-top: 6px; line-height: 1.4; }
+  /* Fallback tile when no licensed photo is available yet */
+  .tile { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; color: #fff; background: var(--pine); }
+  .tile.palace { background: var(--red); }
+  .tile.daytrip { background: var(--ochre); }
+  .tile span { font-family: var(--serif); font-size: 1.9rem; line-height: 1.15; word-break: keep-all; }
+  .tile small { font-size: .8rem; opacity: .85; margin-top: 6px; }
+  .event:target { background: var(--paper-2); }
+  .date-col { font-family: var(--serif); font-size: 1.5rem; line-height: 1.15; }
+  .status { display: inline-block; margin-top: 10px; font: 600 .8rem var(--sans); padding: 3px 9px; border-radius: 3px; background: var(--paper-2); color: var(--ink); }
+  .status.ending { background: var(--ochre); color: #fff; }
+  .status.now { background: var(--pine); color: var(--paper); }
+  .event h3 { font-family: var(--serif); font-weight: 400; font-size: 1.45rem; line-height: 1.2; margin: 0; }
+  .kr { color: var(--ink-soft); font-size: .92rem; margin: 2px 0 12px; }
+  .facts { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0 0 12px; font-size: .95rem; }
+  .facts dt { color: var(--ink-soft); }
+  .facts dd { margin: 0; }
+  .summary { margin: 0 0 10px; max-width: 66ch; }
+  .booking { margin: 0 0 10px; max-width: 66ch; font-size: .95rem; color: var(--ink-soft); }
+  .tip { margin: 12px 0; padding: 10px 14px; border-left: 3px solid var(--red); background: var(--paper-2); max-width: 66ch; font-size: .95rem; }
+  .tip strong { color: var(--red); font-weight: 600; }
+  .official { font-weight: 600; font-size: .95rem; }
+  .empty { padding: 24px 0; color: var(--ink-soft); }
+
+  footer { margin: 56px 0 0; padding: 24px 0 48px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .9rem; }
+  footer p { max-width: 70ch; margin: 0 0 8px; }
+
+  @media (max-width: 960px) and (min-width: 681px) {
+    .event { grid-template-columns: 150px 1fr; grid-template-areas: "date body" "date photo"; }
+    .event > .photo { max-width: 300px; }
+  }
+  @media (max-width: 680px) {
+    .event { grid-template-columns: 1fr; grid-template-areas: "date" "photo" "body"; gap: 12px; }
+    .date-col { font-size: 1.25rem; }
+    .ticks, .row { grid-template-columns: 140px 1fr; }
+    .today-line { left: 140px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <a class="brand" href="/">Seoul Genius</a>
+  <a class="tours" href="/tours">Our palace tours</a>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>What's on in Seoul</h1>
+    <p>Festivals, palace night openings and cultural events for the next six weeks. Every date is checked against the organizer's official page, and we refresh this list every two days.</p>
+    <p class="updated" id="updated"></p>
+  </div>
+
+  <div class="ribbon" aria-labelledby="ribbon-title">
+    <h2 id="ribbon-title">The next six weeks at a glance</h2>
+    <div class="ribbon-scroll">
+      <div class="ribbon-inner" id="ribbon"></div>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <span class="lg-palace">Palaces and royal heritage</span>
+      <span>Festivals and arts</span>
+      <span class="lg-daytrip">Day trip from Seoul</span>
+    </div>
+  </div>
+
+  <div class="filters" role="group" aria-label="Filter events">
+    <button type="button" data-filter="all" aria-pressed="true">All events</button>
+    <button type="button" data-filter="palace" aria-pressed="false">Palaces</button>
+    <button type="button" data-filter="night" aria-pressed="false">Evenings</button>
+    <button type="button" data-filter="free" aria-pressed="false">Free</button>
+    <button type="button" data-filter="daytrip" aria-pressed="false">Day trips</button>
+  </div>
+
+  <div id="groups"></div>
+</main>
+
+<footer class="wrap">
+  <p id="footer-updated"></p>
+  <p>Event details come from official organizers, including the Korea Heritage Service, the Korea Heritage Agency, the Seoul Metropolitan Government and the Seoul Foundation for Arts and Culture. Programs can change at short notice, so please confirm times and tickets on the official page before you go.</p>
+  <p>Posters and photos are shown with the credit and license under each image. Images from the Korea Tourism Organization (TourAPI and Photo Korea) are used under the Korea Open Government License (KOGL) Type 1 or Type 3 and are displayed unaltered.</p>
+  <p>&copy; Seoul Genius. Licensed tour operator in Seoul.</p>
+</footer>
+
+<script>
+/* ============================================================
+   EVENT DATA
+   The automated update only replaces this block.
+   Dates are YYYY-MM-DD in Korea time.
+   ============================================================ */
+/* PHOTOS
+   Add a licensed poster or photo to any event with:
+     image: { src: "...", alt: "What the image shows", credit: "Credit line", license: "KOGL Type 3" }
+   Allowed sources only:
+     1) TourAPI festival image (firstimage) where cpyrhtDivCd is Type1 or Type3
+        credit: "Korea Tourism Organization (TourAPI)"   license: "KOGL Type 1" / "KOGL Type 3"
+        Use https for the URL. Type2/Type4 or empty cpyrhtDivCd: do not use.
+     2) Seoul Genius's own photos      credit: "© Seoul Genius"
+     3) Photo Korea, KOGL Type 1       credit: "© Korea Tourism Organization Photo Korea - <photographer>"
+     4) Organizer posters used with written permission, credited as they require
+   Images are never cropped or edited (object-fit: contain).
+   Never hotlink or copy official posters, leaflets or press photos without permission.
+   Events without an image show a colored tile with the Korean name. */
+const GENERATED = "2026-09-30";
+const EVENTS = [
+  {
+    id: "gyeongbokgung-night",
+    name: "Gyeongbokgung Palace Night Opening",
+    kr: "경복궁 야간관람",
+    start: "2026-09-02", end: "2026-10-02",
+    cat: "palace", tags: ["palace", "night"],
+    when: "Wed to Sun, 7:00 to 9:30 PM (last entry 8:30 PM)",
+    where: "Gyeongbokgung Palace",
+    transit: "Gyeongbokgung Station, Line 3",
+    fee: "₩3,000 (free if you wear hanbok)",
+    summary: "The throne hall, Gyeonghoeru Pavilion and the Amisan garden stay open after dark, lit up for the autumn season. Musicians from the National Gugak Center perform court music and dance on selected evenings.",
+    booking: "Tickets are sold online through NOL, up to 3,000 a day and 4 per person.",
+    tip: "Join our daytime Gyeongbokgung tour for the stories behind each hall, then come back at night to see them lit up.",
+    link: "https://royal.khs.go.kr"
+  },
+  {
+    id: "changdeokgung-moonlight",
+    name: "Changdeokgung Moonlight Tour",
+    kr: "창덕궁 달빛기행",
+    start: "2026-09-10", end: "2026-10-17",
+    cat: "palace", tags: ["palace", "night"],
+    when: "Thu to Sun, departures 7:10 to 8:10 PM, about 100 minutes",
+    where: "Changdeokgung Palace",
+    transit: "Anguk Station, Line 3",
+    fee: "₩30,000",
+    summary: "A guided walk by silk lantern through Changdeokgung, a UNESCO World Heritage palace. Groups of 28 pass the throne hall and Nakseonjae, hear a daegeum flute performance, and finish with court music and tea at Yeongyeongdang.",
+    booking: "Tickets were allocated by lottery. Sessions in English, Chinese and Japanese run on Oct 4 and Oct 11 and are sold through Creatrip, so check for returned seats.",
+    link: "https://www.kh.or.kr"
+  },
+  {
+    id: "seoul-autumn-festa",
+    name: "Seoul Autumn Festa",
+    kr: "서울어텀페스타",
+    start: "2026-09-18", end: "2026-11-29",
+    cat: "arts", tags: [],
+    when: "Daily, times vary by program",
+    where: "Theaters, parks and the Daehangno theater district across Seoul",
+    transit: "Hyehwa Station, Line 4 (Daehangno hub)",
+    fee: "Varies by program",
+    summary: "Seoul's autumn performing-arts season brings together 38 festivals and more than 550 programs, from dance and theater to street performance. An information center in Daehangno helps you find shows by date.",
+    link: "https://festival.seoul.go.kr/"
+  },
+  {
+    id: "hangang-bitseom",
+    name: "Seoul Light Hangang Bitseom Festival",
+    kr: "서울라이트 한강 빛섬축제",
+    start: "2026-10-02", end: "2026-10-11",
+    cat: "arts", tags: ["night", "free"],
+    when: "Daily, 6:30 to 10:30 PM",
+    where: "Nodeul Island, Han River",
+    transit: "Nodeul Station, Line 9",
+    fee: "Free",
+    summary: "Nodeul Island in the middle of the Han River becomes an open-air gallery of 14 laser and media-art works. Evenings add short talks, live music and a lighting fashion show on Oct 9.",
+    booking: "A special river cruise runs between the Yeouido pier and the island during the festival.",
+    link: "https://nodeul.org/program/%EC%84%9C%EC%9A%B8%EB%9D%BC%EC%9D%B4%ED%8A%B8-%ED%95%9C%EA%B0%95-%EB%B9%9B%EC%84%AC%EC%B6%95%EC%A0%9C/"
+  },
+  {
+    id: "jeongjo-procession",
+    name: "King Jeongjo's Royal Procession",
+    kr: "정조대왕 능행차 공동재현",
+    start: "2026-10-04", end: "2026-10-04",
+    cat: "palace", tags: ["palace", "free"],
+    when: "Sunday, Oct 4 (check the route timetable)",
+    where: "Starts at Gyeongbokgung, continues through Suwon to Hwaseong",
+    transit: "Gyeongbokgung Station, Line 3 for the Seoul start",
+    fee: "Free",
+    summary: "A reenactment of King Jeongjo's 1795 journey to honor his parents, with costumed courtiers, soldiers and horses. Seoul, Suwon and Hwaseong stage the route together, so you can catch the parade at more than one point.",
+    link: "https://www.swcf.or.kr/?p=262"
+  },
+  {
+    id: "suwon-hwaseong-festival",
+    name: "Suwon Hwaseong Cultural Festival",
+    kr: "수원화성문화제",
+    start: "2026-10-04", end: "2026-10-11",
+    cat: "daytrip", tags: ["daytrip", "night"],
+    when: "Daily, programs from afternoon into the evening",
+    where: "Hwaseong Haenggung Palace and Suwon Hwaseong Fortress, Suwon",
+    transit: "About one hour from central Seoul by subway or train",
+    fee: "Varies by program",
+    summary: "Suwon's biggest festival takes over its UNESCO-listed fortress for eight days. The royal procession arrives on opening day, and a night-time cavalry performance at Yeonmudae runs from Oct 7 to 10.",
+    link: "https://www.swcf.or.kr/?p=262"
+  },
+  {
+    id: "royal-culture-festival",
+    name: "Royal Culture Festival (Autumn)",
+    kr: "궁중문화축전",
+    start: "2026-10-07", end: "2026-10-11",
+    cat: "palace", tags: ["palace"],
+    when: "Daily, programs from morning to evening",
+    where: "Gyeongbokgung, Changdeokgung, Deoksugung, Changgyeonggung and Jongmyo Shrine",
+    transit: "Gyeongbokgung Station (Line 3) or Jongno 3-ga Station (Lines 1, 3, 5)",
+    fee: "Many drop-in programs; some need advance booking",
+    summary: "Korea's largest palace festival fills all four main palaces and Jongmyo Shrine with exhibitions, reenactments and performances. Look for the royal daily-life reenactment at Changgyeonggung (Oct 9 and 10), traditional street parades, and a stamp tour across ten spots.",
+    booking: "Foreign visitors have their own allocations: a hanbok banquet at Gyeongbokgung on Oct 9 and 10, and an English session of the morning palace program every day.",
+    tip: "Our palace guides can build your tour around the festival schedule so you catch the programs worth seeing.",
+    link: "https://www.kh.or.kr/fest"
+  },
+  {
+    id: "mulbit-yeonhwa",
+    name: "Changgyeonggung Mulbit Yeonhwa",
+    kr: "창경궁 물빛연화",
+    start: "2026-10-07", end: "2026-11-01",
+    cat: "palace", tags: ["palace", "night"],
+    when: "Wed to Sun, shows at 7:00, 7:30 and 8:00 PM",
+    where: "Chundangji Pond, Changgyeonggung Palace",
+    transit: "Hyehwa Station, Line 4",
+    fee: "₩1,000, palace admission included",
+    summary: "A media-art show over Chundangji Pond that blends light, water and the palace's autumn trees into one scene.",
+    booking: "Advance booking only on Ticketlink, 400 seats per show, ages 7 and up. No tickets are sold on site.",
+    tip: "Take our Changgyeonggung tour in the late afternoon and stay on for the 7:00 PM show.",
+    link: "https://kh.or.kr/cont/view/fest/month/menu/210?idx=110661&month=10&searchCategory1=600&searchCategory2=&searchCategory3=&searchCategory6=&searchDate=202610&searchField=all&searchText=&searchType=&thisPage=1&weekSel=&year=2026"
+  },
+  {
+    id: "seoul-design-week",
+    name: "Seoul Design Week",
+    kr: "서울디자인위크",
+    start: "2026-10-14", end: "2026-10-25",
+    cat: "arts", tags: [],
+    when: "Daily, 10:00 AM to 8:00 PM",
+    where: "Dongdaemun Design Plaza (DDP), plus venues in Seongsu and Hongdae",
+    transit: "Dongdaemun History & Culture Park Station, Lines 2, 4, 5",
+    fee: "DDP Design Fair (Oct 14 to 18) is ticketed; other programs vary",
+    summary: "Twelve days of design exhibitions across Seoul, a fair with about 80 Korean lifestyle brands, and outdoor design markets at DDP on the weekends of Oct 16 to 18 and Oct 23 to 25.",
+    link: "https://seoul-design.or.kr"
+  }
+];
+
+/* ============================================================
+   RENDERING (no need to edit below)
+   ============================================================ */
+const WINDOW_DAYS = 42;
+const DAY = 86400000;
+const parse = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const diff = (a, b) => Math.round((b - a) / DAY);
+const fmt = (d, opt) => d.toLocaleDateString("en-US", Object.assign({ month: "short", day: "numeric" }, opt || {}));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function dateRange(s, e) {
+  if (+s === +e) return fmt(s);
+  if (s.getMonth() === e.getMonth()) return fmt(s) + "–" + e.getDate();
+  return fmt(s) + " – " + fmt(e);
+}
+
+const events = EVENTS.map(ev => Object.assign({}, ev, { s: parse(ev.start), e: parse(ev.end) }))
+  .filter(ev => ev.e >= today && diff(today, ev.s) < WINDOW_DAYS)
+  .sort((a, b) => a.s - b.s || a.e - b.e);
+
+function status(ev) {
+  if (ev.s <= today) {
+    const left = diff(today, ev.e);
+    if (left === 0) return { cls: "ending", text: "Last day today" };
+    if (left <= 3) return { cls: "ending", text: "Ends in " + left + (left === 1 ? " day" : " days") };
+    return { cls: "now", text: "On now" };
+  }
+  const until = diff(today, ev.s);
+  if (until === 1) return { cls: "", text: "Starts tomorrow" };
+  return { cls: "", text: "Starts " + fmt(ev.s, { weekday: "short" }) };
+}
+
+/* Updated line */
+const gen = parse(GENERATED);
+const genText = "Last updated " + gen.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + " (Korea time).";
+document.getElementById("updated").textContent = genText;
+document.getElementById("footer-updated").textContent = genText;
+
+/* Timeline ribbon */
+(function buildRibbon() {
+  const root = document.getElementById("ribbon");
+  let ticks = '<div class="ticks"><div></div><div class="ticks-track">';
+  for (let i = 0; i < WINDOW_DAYS; i++) {
+    const d = new Date(today.getTime() + i * DAY);
+    const isMonth = d.getDate() === 1;
+    if (i === 0 || isMonth || i % 7 === 0) {
+      if (i % 7 === 0 && !isMonth && i !== 0 && d.getDate() <= 3) continue; /* avoid crowding next to a month label */
+      let label = (i === 0) ? "Today" : (isMonth ? fmt(d, { day: undefined }) : fmt(d));
+      if (isMonth && i > 0 && i <= 3) label = ""; /* month line only, so it does not collide with "Today" */
+      ticks += '<span class="tick' + (isMonth ? " month" : "") + '" style="left:' + (i / WINDOW_DAYS * 100) + '%">' + label + "</span>";
+    }
+  }
+  ticks += "</div></div>";
+
+  let rows = "";
+  events.forEach(ev => {
+    const sRaw = diff(today, ev.s), eRaw = diff(today, ev.e);
+    const s = Math.max(0, sRaw), e = Math.min(WINDOW_DAYS - 1, eRaw);
+    const cls = ["bar", ev.cat === "palace" ? "palace" : ev.cat === "daytrip" ? "daytrip" : "",
+      sRaw < 0 ? "open-left" : "", eRaw > WINDOW_DAYS - 1 ? "open-right" : ""].join(" ");
+    rows += '<a class="row" href="#' + ev.id + '" data-tags="' + ev.tags.join(" ") + '" aria-label="' + esc(ev.name + ", " + dateRange(ev.s, ev.e)) + '">' +
+      '<span class="row-name">' + esc(ev.name) + "</span>" +
+      '<span class="row-track"><span class="' + cls + '" style="left:' + (s / WINDOW_DAYS * 100) + "%;width:" + ((e - s + 1) / WINDOW_DAYS * 100) + '%"></span></span></a>';
+  });
+  root.innerHTML = ticks + rows + '<span class="today-line" aria-hidden="true"></span>';
+})();
+
+/* Photo or fallback tile */
+function tile(ev) {
+  const cls = ev.cat === "palace" ? "palace" : ev.cat === "daytrip" ? "daytrip" : "";
+  return '<div class="tile ' + cls + '"><span lang="ko">' + esc(ev.kr) + "</span><small>" + esc(ev.where.split(",")[0]) + "</small></div>";
+}
+function photo(ev) {
+  if (!ev.image || !ev.image.src) {
+    return '<figure class="photo" aria-hidden="true"><div class="photo-frame">' + tile(ev) + "</div></figure>";
+  }
+  const im = ev.image;
+  return '<figure class="photo"><div class="photo-frame" data-fallback="' + esc(tile(ev)) + '">' +
+    '<img src="' + esc(im.src) + '" alt="' + esc(im.alt || ev.name) + '" loading="lazy" decoding="async" ' +
+    'onerror="var f=this.closest(\'figure\'),c=f.querySelector(\'figcaption\');if(c)c.remove();f.setAttribute(\'aria-hidden\',\'true\');this.parentNode.innerHTML=this.parentNode.dataset.fallback">' +
+    "</div>" + (im.credit ? "<figcaption>" + esc(im.credit) + (im.license ? ", " + esc(im.license) : "") + "</figcaption>" : "") + "</figure>";
+}
+
+/* Grouped event list */
+(function buildGroups() {
+  const groups = [
+    { key: "now", title: "Happening now", test: ev => ev.s <= today },
+    { key: "soon", title: "Coming up in the next two weeks", test: ev => ev.s > today && diff(today, ev.s) <= 14 },
+    { key: "later", title: "Later this season", test: ev => diff(today, ev.s) > 14 }
+  ];
+  let html = "";
+  groups.forEach(g => {
+    const list = events.filter(g.test);
+    if (!list.length) return;
+    html += '<section class="group" data-group="' + g.key + '"><h2>' + g.title + "</h2>";
+    list.forEach(ev => {
+      const st = status(ev);
+      html += '<article class="event" id="' + ev.id + '" data-tags="' + ev.tags.join(" ") + '">' +
+        '<div class="date-col">' + dateRange(ev.s, ev.e) + '<br><span class="status ' + st.cls + '">' + st.text + "</span></div>" +
+        photo(ev) +
+        '<div class="body"><h3>' + esc(ev.name) + '</h3><p class="kr" lang="ko">' + esc(ev.kr) + "</p>" +
+        '<dl class="facts"><dt>When</dt><dd>' + esc(ev.when) + "</dd><dt>Where</dt><dd>" + esc(ev.where) +
+        "</dd><dt>Getting there</dt><dd>" + esc(ev.transit) + "</dd><dt>Price</dt><dd>" + esc(ev.fee) + "</dd></dl>" +
+        '<p class="summary">' + esc(ev.summary) + "</p>" +
+        (ev.booking ? '<p class="booking">' + esc(ev.booking) + "</p>" : "") +
+        (ev.tip ? '<p class="tip"><strong>Seoul Genius tip:</strong> ' + esc(ev.tip) + "</p>" : "") +
+        '<a class="official" href="' + esc(ev.link) + '" target="_blank" rel="noopener">Official page</a>' +
+        "</div></article>";
+    });
+    html += "</section>";
+  });
+  if (!html) html = '<p class="empty">No events are listed for the next six weeks yet. Check back in two days, or ask us what is on during your trip.</p>';
+  document.getElementById("groups").innerHTML = html;
+})();
+
+/* Filters */
+(function filters() {
+  const buttons = document.querySelectorAll(".filters button");
+  buttons.forEach(btn => btn.addEventListener("click", () => {
+    const f = btn.dataset.filter;
+    buttons.forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+    document.querySelectorAll("[data-tags]").forEach(el => {
+      const tags = el.dataset.tags.split(" ");
+      el.hidden = !(f === "all" || tags.includes(f));
+    });
+    document.querySelectorAll("section.group").forEach(sec => {
+      sec.hidden = !sec.querySelector(".event:not([hidden])");
+    });
+  }));
+})();
+</script>
+</body>
+</html>
